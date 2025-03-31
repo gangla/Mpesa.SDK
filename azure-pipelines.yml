@@ -1,0 +1,86 @@
+# Add steps that publish symbols, save build artifacts, and more:
+# https://docs.microsoft.com/vsts/pipelines/apps/windows/dot-net
+
+trigger:
+- master
+- rel/*
+
+pool:
+  vmImage: 'windows-latest'
+
+variables:
+  solution: '**/*.sln'
+  project: '**/MpesaLib.csproj'
+  buildPlatform: 'Any CPU'
+  buildConfiguration: 'Release'
+  nugetVersion: '5.2.0' # https://dist.nuget.org/tools.json
+
+steps:
+
+- task: UseDotNet@2
+  displayName: 'Use dotnet sdk 3.1.201'
+  inputs:
+    version: 3.1.201
+    includePreviewVersions: true
+
+- task: DotNetCoreCLI@2  
+  inputs:
+    command: custom
+    custom: tool
+    arguments: install --tool-path . nbgv
+  displayName: Install NBGV tool
+  condition: and(succeeded(), eq(variables['system.pullrequest.isfork'], false))
+
+- script: nbgv cloud
+  displayName: Set Version
+  condition: and(succeeded(), eq(variables['system.pullrequest.isfork'], false))
+
+- task: NuGetToolInstaller@1
+  inputs:
+    versionSpec: $(nugetVersion) 
+    checkLatest: true
+    
+
+- task: NuGetCommand@2
+  inputs:
+    command: restore
+    restoreSolution: '$(solution)'
+  displayName: Nuget Restore
+ 
+- task: DotNetCoreCLI@2
+  inputs:
+    command: build
+    projects: $(solution)
+    arguments: -c $(BuildConfiguration)   
+  displayName: Build 
+  
+- powershell: |
+    mkdir $(Build.ArtifactStagingDirectory)\Packages
+    $version = .\nbgv get-version -f json | ConvertFrom-Json
+  displayName: Create package folder
+
+- task: DotNetCoreCLI@2
+  inputs:
+    command: pack 
+    arguments: -c $(BuildConfiguration) 
+    packagesToPack: '**/MpesaLib.csproj'
+    versioningScheme: byBuildNumber
+    packDirectory: '$(Build.ArtifactStagingDirectory)\Packages'
+  displayName: Dotnet Pack 
+
+
+- task: PublishBuildArtifacts@1
+  displayName: Publish Package Artifacts
+  inputs:
+    pathToPublish: $(Build.ArtifactStagingDirectory)\Packages
+    artifactType: container
+    artifactName: Packages
+  condition: and(succeeded(), eq(variables['system.pullrequest.isfork'], false))
+  
+- powershell: |
+    choco install docfx -y
+    docfx docfx_project/docfx.json
+    if ($lastexitcode -ne 0){
+      throw ("Error generating document")
+    }
+  displayName: "docfx documentation build"

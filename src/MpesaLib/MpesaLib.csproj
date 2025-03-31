@@ -1,0 +1,44 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>      
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <Authors>Elvis Ayiemba</Authors>
+    <Company>Independent Developer</Company>
+    <Description>.Net Standard Mpesa API  Library for .NET developers.</Description>
+    <PackageTags>mpesa payment billing c2b b2c, lipanampesa</PackageTags>
+    <Copyright>Copyright © Elvis Ayiemba.  All rights reserved.</Copyright>
+    <PackageLicenseUrl>https://ayiemba.github.io/MpesaLib/articles/license.html</PackageLicenseUrl>
+    <PackageProjectUrl>https://ayiemba.github.io/MpesaLib</PackageProjectUrl>
+    <PackageReleaseNotes>
+       - Minor Design Enhancements
+       - Instantiate Data transfer objects by passing constructor arguments
+    </PackageReleaseNotes>   
+    <IncludeBuildOutput>true</IncludeBuildOutput>   
+    <Version>3.2.5</Version> 
+  </PropertyGroup>
+  
+  <PropertyGroup>
+    <LangVersion>latest</LangVersion>
+  </PropertyGroup>
+  
+  <PropertyGroup>
+    <LangVersion>latest</LangVersion>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
+  </PropertyGroup>
+
+  <ItemGroup>     
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />        
+  </ItemGroup>
+  
+
+  <PropertyGroup Condition=" '$(TargetFramework)' == 'netstandard2.0'">
+    <DefineConstants>NETCORE;NETSTANDARD;NETSTANDARD2_0</DefineConstants>
+  </PropertyGroup>
+ 
+
+</Project>

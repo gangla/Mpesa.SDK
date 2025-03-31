@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>MpesaLib</id>
+	
+    <version>$version$</version>
+    <title>Mpesa API Library for .NET Developers</title>
+    <authors>Elvis Ayiemba</authors>
+    <owners>Elvis Ayiemba</owners>
+    <licenseUrl>https://github.com/ayiemba/MpesaLib/blob/master/LICENSE</licenseUrl>
+    <projectUrl>https://ayiemba.github.io/MpesaLib/</projectUrl>
+    <iconUrl>https://github.com/ayiemba/MpesaLib/blob/master/screenshots/mlib.png</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>MpesaLib provides a simple way for C# developers to integrate Mpesa API's into their C# projetcs.</description>
+    <releaseNotes>removed support for .NET FRAMEWORK 40</releaseNotes>
+    <copyright>Copyright (C) Geospartan tech.  All rights reserved.</copyright>
+    <tags>mpesa payment billing c2b b2c lipanampesa</tags>
+    <dependencies>
+	<group targetFramework="netstandard20">
+	   <dependency id="Newtonsoft.Json" version="11.0.2" />
+	</group>
+    </dependencies>
+	  
+   
+	
+  </metadata>
+  <files> 
+     <file src="build\**" target="build" />        
+  </files>
+  
+</package>
